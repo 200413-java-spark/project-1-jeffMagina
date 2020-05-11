@@ -1,37 +1,41 @@
 package spark;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashMap;
 
-public class SQLRepo implements Dao{
 
-	@Override
-	public void insert(Object e) {
+public class SQLRepo {
+
+	public void insert(String key, String value) {
 		
-		try (Connection conn = SqlDataSource.getConnection();){
+		try (Connection conn = SQLDataSource.getConnection();){
+			// insert into SparkTransformations table id auto generated
+			PreparedStatement SparkTransStmt = conn.prepareStatement("insert into SparkTransformations(name,transformation) values (?,?)");
+			SparkTransStmt.setString(1, key);
+			SparkTransStmt.setString(2, value);
+			SparkTransStmt.addBatch();
+			SparkTransStmt.executeBatch();
 			
 		} catch (SQLException ex) {
 			System.err.println(ex.getMessage());
 		}
-		
 	}
-	@Override
-	public List readAll() {
-		ArrayList<String> testArray = new ArrayList<>();
-		try (Connection conn = SqlDataSource.getConnection();){
-			Statement testStmt = conn.createStatement();
-			ResultSet testRS = testStmt.executeQuery("Select * from customer");
-			while (testRS.next()) {
-				//grab database info and add to arraylist
-			}
-			
+	
+	public LinkedHashMap<String, String> readAll() {
+		LinkedHashMap<String, String> dataStorage = new LinkedHashMap<String, String>();
+		try (Connection conn = SQLDataSource.getConnection();){
+			Statement SparkTransStmt = conn.createStatement();
+			ResultSet SparkTransStmtRs = SparkTransStmt.executeQuery("Select * from SparkTransformations");
+			while (SparkTransStmtRs.next()) {
+				dataStorage.put(SparkTransStmtRs.getString("name"), SparkTransStmtRs.getString("transformation"));
+			}		
 		} catch (SQLException ex) {
 			System.err.println(ex.getMessage());
 		}
-		return testArray;
+		return dataStorage;
 	}
 }

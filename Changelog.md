@@ -1,8 +1,25 @@
-# Version 0.0.1
+# Version 1.0.0
 ## Added
-* read in csv.file using apache spark
-* servlet functionality
-* lambda functions to do avging and counting of dummy data
+* Schema for Database
+* DockerFile to create Database on AWS server in a docker container
+* read from database and insert into database in SQLRepo.java
+* implemented read from database in JeffsProject1Servlet and Servlet displays database info
+* LinkedHashMap to store RDD transformations in SparkTransformations.java
+* Get method for LinkedHashMap in SparkTransformations
+* Way in serverApp to just start server and not insert data via csv file
+* Tomcat embeded server in ServerAPP (main)
+
+## Changed
+* Renamed HelloServlet.java to JeffsProject1Serlvet to better represent servlet name
+* SQLDataSource to have correct URL for database
+* pom.xml to incorporate tomcat embed
+* LoadCSVFile removed debugging printouts
+* SparkTransformations to have all private methods
+* SparkTransformations constructor calls all private methods which do RDD transformations and stores them to a LinkedHashMap
+* Sends RDD transformations to a database on an AWS server
+
+## Deleted 
+* removed servlet api from pom.xml
 
 # Version 0.1.0
 ## Added
@@ -26,3 +43,10 @@
 ## Deleted
 * dummyData.cxsv
 * deleted GoodbyeServlet not needed
+
+# Version 0.0.1
+## Added
+* read in csv.file using apache spark
+* servlet functionality
+* lambda functions to do avging and counting of dummy data
+

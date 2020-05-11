@@ -30,11 +30,6 @@ public class LoadCSVFile {
 			return new MyCSVFile(fields[0],fields[1],fields[2], fields[3], fields[4], fields[5], fields[6], fields[7]);
 		});
 		
-		//sysout print check
-		filteredHeaderlessRow.foreach(f -> {
-			System.out.println(f.gender + " "+ f.race + " "+ f.parentEducation + " " + f.lunch + " " + f.testPrep + " " + f.mathScore + " " + f.readingScore + " " + f.writingScore);
-		});
-		
 		return filteredHeaderlessRow;
 	}
 }

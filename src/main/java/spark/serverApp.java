@@ -20,7 +20,7 @@ public class ServerApp {
 		} 
 		
 		// used to upload text file data and run server
-		else if (args[0].equalsIgnoreCase("loadtext")) {
+		else if (args[0].equalsIgnoreCase("loadCSV")) {
 			String textFile = args[1];
 			
 			SparkConf conf = new SparkConf()
@@ -76,7 +76,7 @@ public class ServerApp {
 			startTomcat();
 			
 			//close JavaSparkContect
-			sc.close();
+			//sc.close();
 		}
 	}
 

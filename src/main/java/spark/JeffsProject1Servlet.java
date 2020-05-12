@@ -19,8 +19,8 @@ public class JeffsProject1Servlet extends HttpServlet {
 		
 		LinkedHashMap<String,String> databaseData = sqlRepo.readAll();
 
-		for(String key2 : databaseData.keySet()) {
-			resp.getWriter().println(databaseData.get(key2));
+		for(String key : databaseData.keySet()) {
+			resp.getWriter().println(databaseData.get(key));
 		}
 
 	}

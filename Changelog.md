@@ -1,3 +1,7 @@
+# Version 1.0.1
+## Changed
+* LoadCSVFile added caching for RDDs that are used over and over
+
 # Version 1.0.0
 ## Added
 * Schema for Database

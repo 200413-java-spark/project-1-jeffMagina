@@ -1,3 +1,16 @@
+# Version 2.0.0 
+* --Presentable project
+## Added
+* data.html - simple html file to allow for user input using selector check boxes
+* spark transformations for individual math score, individual reading score 
+and individual writing score for each major test group and an overall count spark transformation
+* A better way to display transformation data via java servlet instead of no named string data
+using some html coding
+
+## Changed
+* Took out Debug printing from main ServerApp.java
+* format of what data going to Database looks like
+
 # Version 1.0.1
 ## Changed
 * LoadCSVFile added caching for RDDs that are used over and over

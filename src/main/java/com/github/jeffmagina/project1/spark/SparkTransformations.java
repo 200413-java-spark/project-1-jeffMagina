@@ -14,20 +14,49 @@ public class SparkTransformations {
 
 	public SparkTransformations(JavaRDD<MyCSVFile> data) {
 		this.data = data;
-		this.dataStorage.put("countGender", countGender());
-		this.dataStorage.put("countRace", countRace());
-		this.dataStorage.put("countParentEducation", countParentEducation());
-		this.dataStorage.put("countLunch", countLunch());
-		this.dataStorage.put("countTestPrep", countTestPrep());
-		this.dataStorage.put("mathScoreAvg", Double.toString(mathScoreAvg()));
-		this.dataStorage.put("readingScoreAvg", Double.toString(readingScoreAvg()));
-		this.dataStorage.put("writingScoreAvg", Double.toString(writingScoreAvg()));
-		this.dataStorage.put("overallScoreAvg", Double.toString(overallScoreAvg()));
-		this.dataStorage.put("genderAvg", genderAvg());
-		this.dataStorage.put("raceAvg", raceAvg());
-		this.dataStorage.put("parentEducationAvg", parentEducationAvg());
-		this.dataStorage.put("lunchAvg", lunchAvg());
-		this.dataStorage.put("testPrepAvg", testPrepAvg());
+		//count spark manipulations
+		this.dataStorage.put("CountGender", countGender());
+		this.dataStorage.put("CountRace", countRace());
+		this.dataStorage.put("CountParentEducation", countParentEducation());
+		this.dataStorage.put("CountLunch", countLunch());
+		this.dataStorage.put("CountTestPrep", countTestPrep());
+		
+		//gender avg spark manipulations
+		this.dataStorage.put("MathAvgGender",genderMathAvg());
+		this.dataStorage.put("ReadingAvgGender",genderReadingAvg());
+		this.dataStorage.put("WritingAvgGender",genderWritingAvg());
+		this.dataStorage.put("OverallAvgGender", genderOverallAvg());
+		
+		//race avg spark manipulations
+		this.dataStorage.put("MathAvgRace",raceMathAvg());
+		this.dataStorage.put("ReadingAvgRace",raceReadingAvg());
+		this.dataStorage.put("WritingAvgRace",raceWritingAvg());
+		this.dataStorage.put("OverallAvgRace", raceOverallAvg());
+		
+		//parent education avg spark manipulations
+		this.dataStorage.put("MathAvgParentEducation",parentEducationMathAvg());
+		this.dataStorage.put("ReadingAvgParentEducation",parentEducationReadingAvg());
+		this.dataStorage.put("wWritingAvgParentEducation",parentEducationWritingAvg());
+		this.dataStorage.put("OverallAvgParentEducation", parentEducationOverallAvg());
+		
+		//provided lunch avg spark manipulations
+		this.dataStorage.put("MathAvgLunch",lunchMathAvg());
+		this.dataStorage.put("ReadingAvgLunch",lunchReadingAvg());
+		this.dataStorage.put("WritingAvgLunch",lunchWritingAvg());
+		this.dataStorage.put("OverallAvgLunch", lunchOverallAvg());
+		
+		//test prep avg spark manipulations
+		this.dataStorage.put("MathAvgTestPrep",testPrepMathAvg());
+		this.dataStorage.put("ReadingAvgTestPrep",testPrepReadingAvg());
+		this.dataStorage.put("WritingAvgTestPrep",testPrepWritingAvg());
+		this.dataStorage.put("OverallAvgTestPrep",testPrepOverallAvg());
+
+		// overall counts/avgs
+		this.dataStorage.put("CountOverall", Double.toString(overallCount())); 
+		this.dataStorage.put("MathAvgOverall", Double.toString(mathScoreAvg()));
+		this.dataStorage.put("ReadingAvgOverall", Double.toString(readingScoreAvg()));
+		this.dataStorage.put("WritingAvgOverall", Double.toString(writingScoreAvg()));
+		this.dataStorage.put("OverallAvgOverall", Double.toString(overallScoreAvg()));
 
 	}
 	
@@ -39,6 +68,7 @@ public class SparkTransformations {
 		return dataStorage;
 	}
 
+	//count
 	private String countGender() {
 		return data.mapToPair((f) -> new Tuple2<>(f.gender, 1)).reduceByKey((x, y) -> ((int) x + (int) y)).collect().toString();
 	}
@@ -59,32 +89,66 @@ public class SparkTransformations {
 		return data.mapToPair((f) -> new Tuple2<>(f.testPrep, 1)).reduceByKey((x, y) -> ((int) x + (int) y)).collect().toString();
 	}
 	
-	private double mathScoreAvg(){
-		return data.map((f) -> (double)f.mathScore).reduce((x,y) -> (x + y))/data.count();
-	}
-	
-	private double readingScoreAvg(){
-		return  data.map((f) -> (double)f.readingScore).reduce((x,y) -> (x + y))/data.count();
-	}
-	
-	private double writingScoreAvg(){
-		return  data.map((f) -> (double)f.writingScore).reduce((x,y) -> (x + y))/data.count();
-	}
-	
-	private double overallScoreAvg(){
-		return (mathScoreAvg() + readingScoreAvg() + writingScoreAvg())/3;
-	}
-	
-	private String genderAvg() {
-		return data.mapToPair(f -> new Tuple2<>(f.gender, (((double)f.mathScore + (double)f.readingScore + (double)f.writingScore)/3)))
+	//gender
+	private String genderMathAvg() {
+		return data.mapToPair(f -> new Tuple2<>(f.gender, (double)f.mathScore))
 				.mapValues(f -> new Tuple2<>(f,1))
 				.reduceByKey((x,y) -> new Tuple2<>(x._1 + y._1, x._2 + y._2))
 				.mapValues(f -> f._1/f._2)
 				.collect()
 				.toString();
 		}	
+	private String genderReadingAvg() {
+		return data.mapToPair(f -> new Tuple2<>(f.gender, (double)f.readingScore))
+				.mapValues(f -> new Tuple2<>(f,1))
+				.reduceByKey((x,y) -> new Tuple2<>(x._1 + y._1, x._2 + y._2))
+				.mapValues(f -> f._1/f._2)
+				.collect()
+				.toString();
+		}
+	private String genderWritingAvg() {
+		return data.mapToPair(f -> new Tuple2<>(f.gender, (double)f.writingScore))
+				.mapValues(f -> new Tuple2<>(f,1))
+				.reduceByKey((x,y) -> new Tuple2<>(x._1 + y._1, x._2 + y._2))
+				.mapValues(f -> f._1/f._2)
+				.collect()
+				.toString();
+		}
+	private String genderOverallAvg() {
+		return data.mapToPair(f -> new Tuple2<>(f.gender, (((double)f.mathScore + (double)f.readingScore + (double)f.writingScore)/3)))
+				.mapValues(f -> new Tuple2<>(f,1))
+				.reduceByKey((x,y) -> new Tuple2<>(x._1 + y._1, x._2 + y._2))
+				.mapValues(f -> f._1/f._2)
+				.collect()
+				.toString();
+		}
 	
-	private String raceAvg() {
+	//race
+	private String raceMathAvg() {
+		return data.mapToPair(f -> new Tuple2<>(f.race, (double)f.mathScore))
+				.mapValues(f -> new Tuple2<>(f,1))
+				.reduceByKey((x,y) -> new Tuple2<>(x._1 + y._1, x._2 + y._2))
+				.mapValues(f -> f._1/f._2)
+				.collect()
+				.toString();
+	}
+	private String raceWritingAvg() {
+		return data.mapToPair(f -> new Tuple2<>(f.race, (double)f.writingScore))
+				.mapValues(f -> new Tuple2<>(f,1))
+				.reduceByKey((x,y) -> new Tuple2<>(x._1 + y._1, x._2 + y._2))
+				.mapValues(f -> f._1/f._2)
+				.collect()
+				.toString();
+	}
+	private String raceReadingAvg() {
+		return data.mapToPair(f -> new Tuple2<>(f.race, (double)f.readingScore))
+				.mapValues(f -> new Tuple2<>(f,1))
+				.reduceByKey((x,y) -> new Tuple2<>(x._1 + y._1, x._2 + y._2))
+				.mapValues(f -> f._1/f._2)
+				.collect()
+				.toString();
+	}
+	private String raceOverallAvg() {
 		return data.mapToPair(f -> new Tuple2<>(f.race, (((double)f.mathScore + (double)f.readingScore + (double)f.writingScore)/3)))
 				.mapValues(f -> new Tuple2<>(f,1))
 				.reduceByKey((x,y) -> new Tuple2<>(x._1 + y._1, x._2 + y._2))
@@ -93,7 +157,32 @@ public class SparkTransformations {
 				.toString();
 	}
 	
-	private String parentEducationAvg() {
+	//parent education
+	private String parentEducationMathAvg() {
+		return data.mapToPair(f -> new Tuple2<>(f.parentEducation,(double)f.mathScore))
+				.mapValues(f -> new Tuple2<>(f,1))
+				.reduceByKey((x,y) -> new Tuple2<>(x._1 + y._1, x._2 + y._2))
+				.mapValues(f -> f._1/f._2)
+				.collect()
+				.toString();
+	}
+	private String parentEducationWritingAvg() {
+		return data.mapToPair(f -> new Tuple2<>(f.parentEducation, (double)f.writingScore))
+				.mapValues(f -> new Tuple2<>(f,1))
+				.reduceByKey((x,y) -> new Tuple2<>(x._1 + y._1, x._2 + y._2))
+				.mapValues(f -> f._1/f._2)
+				.collect()
+				.toString();
+	}
+	private String parentEducationReadingAvg() {
+		return data.mapToPair(f -> new Tuple2<>(f.parentEducation, (double)f.readingScore))
+				.mapValues(f -> new Tuple2<>(f,1))
+				.reduceByKey((x,y) -> new Tuple2<>(x._1 + y._1, x._2 + y._2))
+				.mapValues(f -> f._1/f._2)
+				.collect()
+				.toString();
+	}
+	private String parentEducationOverallAvg() {
 		return data.mapToPair(f -> new Tuple2<>(f.parentEducation, (((double)f.mathScore + (double)f.readingScore + (double)f.writingScore)/3)))
 				.mapValues(f -> new Tuple2<>(f,1))
 				.reduceByKey((x,y) -> new Tuple2<>(x._1 + y._1, x._2 + y._2))
@@ -102,7 +191,32 @@ public class SparkTransformations {
 				.toString();
 	}
 	
-	private String lunchAvg() {
+	//provided lunch
+	private String lunchMathAvg() {
+		return data.mapToPair(f -> new Tuple2<>(f.lunch, (double)f.mathScore))
+				.mapValues(f -> new Tuple2<>(f,1))
+				.reduceByKey((x,y) -> new Tuple2<>(x._1 + y._1, x._2 + y._2))
+				.mapValues(f -> f._1/f._2)
+				.collect()
+				.toString();
+	}
+	private String lunchWritingAvg() {
+		return data.mapToPair(f -> new Tuple2<>(f.lunch, (double)f.writingScore))
+				.mapValues(f -> new Tuple2<>(f,1))
+				.reduceByKey((x,y) -> new Tuple2<>(x._1 + y._1, x._2 + y._2))
+				.mapValues(f -> f._1/f._2)
+				.collect()
+				.toString();
+	}
+	private String lunchReadingAvg() {
+		return data.mapToPair(f -> new Tuple2<>(f.lunch, (double)f.readingScore))
+				.mapValues(f -> new Tuple2<>(f,1))
+				.reduceByKey((x,y) -> new Tuple2<>(x._1 + y._1, x._2 + y._2))
+				.mapValues(f -> f._1/f._2)
+				.collect()
+				.toString();
+	}
+	private String lunchOverallAvg() {
 		return data.mapToPair(f -> new Tuple2<>(f.lunch, (((double)f.mathScore + (double)f.readingScore + (double)f.writingScore)/3)))
 				.mapValues(f -> new Tuple2<>(f,1))
 				.reduceByKey((x,y) -> new Tuple2<>(x._1 + y._1, x._2 + y._2))
@@ -111,12 +225,54 @@ public class SparkTransformations {
 				.toString();
 	}
 	
-	private String testPrepAvg() {
+	// test prep
+	private String testPrepMathAvg() {
+		return data.mapToPair(f -> new Tuple2<>(f.testPrep, (double)f.mathScore))
+				.mapValues(f -> new Tuple2<>(f,1))
+				.reduceByKey((x,y) -> new Tuple2<>(x._1 + y._1, x._2 + y._2))
+				.mapValues(f -> f._1/f._2)
+				.collect()
+				.toString();
+	}
+	private String testPrepWritingAvg() {
+		return data.mapToPair(f -> new Tuple2<>(f.testPrep, (double)f.writingScore))
+				.mapValues(f -> new Tuple2<>(f,1))
+				.reduceByKey((x,y) -> new Tuple2<>(x._1 + y._1, x._2 + y._2))
+				.mapValues(f -> f._1/f._2)
+				.collect()
+				.toString();
+	}
+	private String testPrepReadingAvg() {
+		return data.mapToPair(f -> new Tuple2<>(f.testPrep, (double)f.readingScore))
+				.mapValues(f -> new Tuple2<>(f,1))
+				.reduceByKey((x,y) -> new Tuple2<>(x._1 + y._1, x._2 + y._2))
+				.mapValues(f -> f._1/f._2)
+				.collect()
+				.toString();
+	}
+	private String testPrepOverallAvg() {
 		return data.mapToPair(f -> new Tuple2<>(f.testPrep, (((double)f.mathScore + (double)f.readingScore + (double)f.writingScore)/3)))
 				.mapValues(f -> new Tuple2<>(f,1))
 				.reduceByKey((x,y) -> new Tuple2<>(x._1 + y._1, x._2 + y._2))
 				.mapValues(f -> f._1/f._2)
 				.collect()
 				.toString();
+	}
+	
+	//overall
+	private double overallCount(){
+		return data.count();
+	}
+	private double mathScoreAvg(){
+		return data.map((f) -> (double)f.mathScore).reduce((x,y) -> (x + y))/data.count();
+	}
+	private double readingScoreAvg(){
+		return  data.map((f) -> (double)f.readingScore).reduce((x,y) -> (x + y))/data.count();
+	}
+	private double writingScoreAvg(){
+		return  data.map((f) -> (double)f.writingScore).reduce((x,y) -> (x + y))/data.count();
+	}
+	private double overallScoreAvg(){
+		return (mathScoreAvg() + readingScoreAvg() + writingScoreAvg())/3;
 	}
 }

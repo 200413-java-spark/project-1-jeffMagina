@@ -11,7 +11,7 @@ public class SQLDataSource {
 	private static String password;
 
 	static {
-		url = System.getProperty("database.url", "jdbc:postgresql://3.16.123.110:5433/jeffMaginaProject1");
+		url = System.getProperty("database.url", "jdbc:postgresql://3.17.71.66:5433/jeffMaginaProject1");
 		user = System.getProperty("database.username", "jeffMagina");
 		password = System.getProperty("database.password", "jeffMagina");
 	}

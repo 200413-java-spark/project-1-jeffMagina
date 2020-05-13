@@ -1,4 +1,4 @@
-package spark;
+package com.github.jeffmagina.project1.io;
 
 import java.io.File;
 
@@ -20,7 +20,7 @@ public class LoadCSVFile {
 		String header = allRows.first();
 		JavaRDD<String> headerlessRows = allRows.filter(row -> !row.equals(header)).cache();
 				
-		//map to MyCSVFile data struct
+		// map to MyCSVFile data struct
 		// MyCSVFile contains gender, race, parentEducation, lunch, testPrep, mathScore, readingScore, writingScore
 		JavaRDD<MyCSVFile> filteredHeaderlessRow = headerlessRows.map( (n) -> {
 			String[] fields = n.split(",");

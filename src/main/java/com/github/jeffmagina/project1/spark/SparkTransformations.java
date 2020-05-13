@@ -1,8 +1,10 @@
-package spark;
+package com.github.jeffmagina.project1.spark;
 
 import java.util.LinkedHashMap;
 
 import org.apache.spark.api.java.JavaRDD;
+
+import com.github.jeffmagina.project1.io.MyCSVFile;
 
 import scala.Tuple2;
 
@@ -10,7 +12,7 @@ public class SparkTransformations {
 	JavaRDD<MyCSVFile> data;
 	private LinkedHashMap<String,String> dataStorage = new LinkedHashMap<String,String>();
 
-	SparkTransformations(JavaRDD<MyCSVFile> data) {
+	public SparkTransformations(JavaRDD<MyCSVFile> data) {
 		this.data = data;
 		this.dataStorage.put("countGender", countGender());
 		this.dataStorage.put("countRace", countRace());

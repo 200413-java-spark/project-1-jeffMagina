@@ -1,4 +1,4 @@
-package spark;
+package com.github.jeffmagina.project1.io;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,7 +13,7 @@ public class SQLRepo {
 	public void insert(String key, String value) {
 		
 		try (Connection conn = SQLDataSource.getConnection();){
-			// insert into SparkTransformations table id auto generated
+			// insert into SparkTransformations table, id auto generated
 			PreparedStatement SparkTransStmt = conn.prepareStatement("insert into SparkTransformations(name,transformation) values (?,?)");
 			SparkTransStmt.setString(1, key);
 			SparkTransStmt.setString(2, value);

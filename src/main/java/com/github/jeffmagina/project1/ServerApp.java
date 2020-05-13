@@ -1,4 +1,4 @@
-package spark;
+package com.github.jeffmagina.project1;
 
 import java.io.File;
 import java.util.LinkedHashMap;
@@ -9,6 +9,12 @@ import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 
+import com.github.jeffmagina.project1.io.LoadCSVFile;
+import com.github.jeffmagina.project1.io.MyCSVFile;
+import com.github.jeffmagina.project1.io.SQLRepo;
+import com.github.jeffmagina.project1.spark.SparkTransformations;
+import com.github.jeffmagina.project1.web.JeffsProject1Servlet;
+
 public class ServerApp {
 	
 	public static void main(String args[]) {
@@ -16,7 +22,6 @@ public class ServerApp {
 		//runs server
 		if (args[0].equalsIgnoreCase("server")) {
 			startTomcat();
-			
 		} 
 		
 		// used to upload text file data and run server
@@ -63,7 +68,6 @@ public class ServerApp {
 			
 			System.out.println("Overall TestPrep Score Avg is: " + sparkTransformations.getDataStorage("testPrepAvg"));
 			
-			
 			//send to to database
 			LinkedHashMap<String, String> dataStorage = sparkTransformations.getDataStorage();
 			SQLRepo sqlRepo = new SQLRepo();
@@ -90,7 +94,6 @@ public class ServerApp {
 		try {
 			tomcat.start();
 		} catch (LifecycleException ex) {
-
 			System.err.println(ex.getMessage());
 		}
 		

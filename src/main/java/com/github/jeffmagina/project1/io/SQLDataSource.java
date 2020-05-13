@@ -1,4 +1,4 @@
-package spark;
+package com.github.jeffmagina.project1.io;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

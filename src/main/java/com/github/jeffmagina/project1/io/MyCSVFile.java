@@ -1,14 +1,14 @@
-package spark;
+package com.github.jeffmagina.project1.io;
 
 public class MyCSVFile {
-	String gender;
-	String race;
-	String parentEducation;
-	String lunch;
-	String testPrep;
-	int mathScore;
-	int readingScore;
-	int writingScore;
+	public String gender;
+	public String race;
+	public String parentEducation;
+	public String lunch;
+	public String testPrep;
+	public int mathScore;
+	public int readingScore;
+	public int writingScore;
 
 	MyCSVFile(String gender, String race, String parentEducation, String lunch, String testPrep, String mathScore, String readingScore, String writingScore) {
 		this.gender = gender;

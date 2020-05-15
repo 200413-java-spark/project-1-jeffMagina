@@ -11,33 +11,38 @@ import com.github.jeffmagina.project1.spark.SparkTransformations;
 import com.github.jeffmagina.project1.web.JeffsProject1Servlet;
 
 public class ServerApp {
-	
-	public static void main(String args[]) {
-		
-		// run server
-		if (args[0].equalsIgnoreCase("server")) {
-			startTomcat();
-		} 
-		
-		// upload text file data and run server
-		else if (args[0].equalsIgnoreCase("loadCSV")) {
-			String textFile = args[1];
-			
-			//load TextFile -> create RDD -> do some Transformations using Spark
-			SparkTransformations sparkTransformations = new SparkTransformations(textFile);
-			
-			//Create linked hash map to send to database
-			LinkedHashMap<String, String> dataStorage = sparkTransformations.getDataStorage();
 
-			//send to to database		
-			SQLRepo sqlRepo = new SQLRepo();
-			
-			for(String key : dataStorage.keySet()) {
-				sqlRepo.insert(key,dataStorage.get(key));
+	public static void main(String args[]) {
+
+		if (args.length != 0) {
+			// run server
+			if (args[0].equalsIgnoreCase("server")) {
+				startTomcat();
 			}
-	
-			//initiate embed tomcat
-			startTomcat();
+
+			// upload text file data and run server
+			else if (args[0].equalsIgnoreCase("loadCSV")) {
+				String textFile = args[1];
+
+				// load TextFile -> create RDD -> do some Transformations using Spark
+				SparkTransformations sparkTransformations = new SparkTransformations(textFile);
+
+				// Create linked hash map to send to database
+				LinkedHashMap<String, String> dataStorage = sparkTransformations.getDataStorage();
+
+				// send to to database
+				SQLRepo sqlRepo = new SQLRepo();
+
+				for (String key : dataStorage.keySet()) {
+					sqlRepo.insert(key, dataStorage.get(key));
+				}
+			}
+		}
+		// error message improper usage
+		else {
+			System.out.println("Usage");
+			System.out.println("server");
+			System.out.println("loadCSV [textFile]");
 		}
 	}
 
@@ -53,7 +58,7 @@ public class ServerApp {
 		} catch (LifecycleException ex) {
 			System.err.println(ex.getMessage());
 		}
-		
+
 	}
 
 }

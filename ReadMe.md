@@ -1,8 +1,9 @@
 # Students Performance Evaluation App
 A server app which does Analysis on Student Performance in three categories: 
-* Math
-* Reading
-* Writing
+* Math Score
+* Reading Score
+* Writing Score
+
 
 
 based on Gender, Race, Parent Education, Provided Lunch and completion of a Test Preparation Course 

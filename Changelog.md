@@ -1,3 +1,14 @@
+# Version 2.0.1
+# Added
+* J Unit testing for Spark Transformations
+
+# Changed
+* pom.xml to include rounding dependencies and j unit dependencies
+* Relocated MyCSVFile to Spark folder
+* Moved LoadingCSVFile into SparkTransformations.java
+* Rounded Average values to two decimals places
+* Refactored ServerApp (main file) to be simpler, do less and be a bootstrap
+
 # Version 2.0.0 
 * --Presentable project
 ## Added

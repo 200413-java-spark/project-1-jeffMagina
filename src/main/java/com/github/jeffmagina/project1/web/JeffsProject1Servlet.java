@@ -23,8 +23,8 @@ public class JeffsProject1Servlet extends HttpServlet {
 
 		out.print("<html><body>");
 		out.print("<h1> Jeff's Project 1</h1>");
-		
-		//check to see if user input is incorrect
+
+		// check to see if user input is incorrect
 		if (tokens != null && operations != null) {
 			if (tokens.length == 1) {
 				out.print("<h2> Your Token Selection is:</h2>");
@@ -55,7 +55,7 @@ public class JeffsProject1Servlet extends HttpServlet {
 			sqlRepo.readAll();
 			LinkedHashMap<String, String> databaseData = sqlRepo.readAll();
 
-			//print results based on specified user input
+			// print results based on specified user input
 			out.print("<h3>");
 			for (int i = 0; tokens.length > i; i++) {
 				out.print("<h4>" + tokens[i] + "</h4>");

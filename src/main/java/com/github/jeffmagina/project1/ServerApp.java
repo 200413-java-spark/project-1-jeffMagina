@@ -5,12 +5,7 @@ import java.util.LinkedHashMap;
 
 import org.apache.catalina.LifecycleException;
 import org.apache.catalina.startup.Tomcat;
-import org.apache.spark.SparkConf;
-import org.apache.spark.api.java.JavaRDD;
-import org.apache.spark.api.java.JavaSparkContext;
 
-import com.github.jeffmagina.project1.io.LoadCSVFile;
-import com.github.jeffmagina.project1.io.MyCSVFile;
 import com.github.jeffmagina.project1.io.SQLRepo;
 import com.github.jeffmagina.project1.spark.SparkTransformations;
 import com.github.jeffmagina.project1.web.JeffsProject1Servlet;
@@ -28,24 +23,19 @@ public class ServerApp {
 		else if (args[0].equalsIgnoreCase("loadCSV")) {
 			String textFile = args[1];
 			
-			SparkConf conf = new SparkConf()
-					.setAppName("Testing read in")
-					.setMaster("local");
-
-			JavaSparkContext sc = new JavaSparkContext(conf);
+			//load TextFile -> create RDD -> do some Transformations using Spark
+			SparkTransformations sparkTransformations = new SparkTransformations(textFile);
 			
-			//loadtext file
-			JavaRDD<MyCSVFile> data = new LoadCSVFile(textFile).createRDD(sc);
-			
-			//send to to database			
-			SparkTransformations sparkTransformations = new SparkTransformations(data);
+			//Create linked hash map to send to database
 			LinkedHashMap<String, String> dataStorage = sparkTransformations.getDataStorage();
+
+			//send to to database		
 			SQLRepo sqlRepo = new SQLRepo();
 			
 			for(String key : dataStorage.keySet()) {
 				sqlRepo.insert(key,dataStorage.get(key));
 			}
-
+	
 			//initiate embed tomcat
 			startTomcat();
 		}

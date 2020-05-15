@@ -1,4 +1,4 @@
-package com.github.jeffmagina.project1.io;
+package com.github.jeffmagina.project1.spark;
 
 public class MyCSVFile {
 	public String gender;
@@ -10,7 +10,7 @@ public class MyCSVFile {
 	public int readingScore;
 	public int writingScore;
 
-	MyCSVFile(String gender, String race, String parentEducation, String lunch, String testPrep, String mathScore, String readingScore, String writingScore) {
+	public MyCSVFile(String gender, String race, String parentEducation, String lunch, String testPrep, String mathScore, String readingScore, String writingScore) {
 		this.gender = gender;
 		this.race = race;
 		this.parentEducation = parentEducation;

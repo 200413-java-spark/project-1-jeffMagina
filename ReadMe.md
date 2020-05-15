@@ -2,7 +2,9 @@
 A server app which does Analysis on Student Performance in three categories: 
 * Math
 * Reading
-* Writing  
+* Writing
+
+
 based on Gender, Race, Parent Education, Provided Lunch and completion of a Test Preparation Course 
 and displays selected transformed data to a web browser
 
